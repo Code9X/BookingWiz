@@ -1,0 +1,28 @@
+services:
+  frontend:
+    build:
+      context: ./BookingWiz_Web
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    environment:
+      - BASE_URL=http://backend:7001
+
+  backend:
+    build:
+      context: ./BookingWiz_Admin
+      dockerfile: Dockerfile
+    ports:
+      - "7001:7001"
+    environment:
+      - ASPNETCORE_URLS=http://+:7001
+    volumes:
+      - ./BookingWiz_Admin/Images:/app/Images
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
